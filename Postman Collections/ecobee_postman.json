@@ -1,0 +1,592 @@
+{
+	"info": {
+		"_postman_id": "e7a64583-ec56-4cec-8850-4a68d36c0391",
+		"name": "Ecobee",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetEcoUsage",
+			"item": [
+				{
+					"name": "GetSessionId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dfb8b779-c3bb-47d7-a743-fa4a6a18de3c",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {\r",
+									"    var str = \"Found. Redirecting to /u/login?state=\";\r",
+									"    pm.expect(pm.response.text()).to.include(str);\r",
+									"    str = pm.response.text().replace(str,'');\r",
+									"    pm.environment.set(\"EcoState\", str);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4aa3de7e-cc93-43e3-8d5e-c39f6cdcb7be",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://auth.ecobee.com:443/authorize?response_type=token&response_mode=form_post&client_id=183eORFPlXyz9BbDZwqexHPBQoVjgadh&redirect_uri=https://www.ecobee.com/home/authCallback&audience=https://prod.ecobee.com/api/v1&scope=openid smartWrite piiWrite piiRead smartRead deleteGrants&_ga=2.114779527.1464743709.1695254910-887245236.1695254910",
+							"protocol": "https",
+							"host": [
+								"auth",
+								"ecobee",
+								"com"
+							],
+							"port": "443",
+							"path": [
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "token"
+								},
+								{
+									"key": "response_mode",
+									"value": "form_post"
+								},
+								{
+									"key": "client_id",
+									"value": "183eORFPlXyz9BbDZwqexHPBQoVjgadh"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://www.ecobee.com/home/authCallback"
+								},
+								{
+									"key": "audience",
+									"value": "https://prod.ecobee.com/api/v1"
+								},
+								{
+									"key": "scope",
+									"value": "openid smartWrite piiWrite piiRead smartRead deleteGrants"
+								},
+								{
+									"key": "_ga",
+									"value": "2.114779527.1464743709.1695254910-887245236.1695254910"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAuthState",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1fbc7be6-3ef8-4cd7-9ed2-708e5e79368b",
+								"exec": [
+									"pm.test(\"Body matches string\", function () {\r",
+									"    var str = \"<p>Found. Redirecting to\";\r",
+									"    pm.expect(pm.response.text()).to.include(str);\r",
+									"    const $ = cheerio.load(pm.response.text());\r",
+									"    var href = $('a').attr('href');\r",
+									"    pm.environment.set(\"EcoBearerHref\", href);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "21fad1f2-d1cd-4298-8768-974cea071bad",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "cache-control",
+								"value": "max-age=0",
+								"type": "text"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Microsoft Edge\";v=\"117\", \"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"117\"",
+								"type": "text"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0",
+								"type": "text"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\"",
+								"type": "text"
+							},
+							{
+								"key": "upgrade-insecure-requests",
+								"value": "1",
+								"type": "text"
+							},
+							{
+								"key": "origin",
+								"value": "https://auth.ecobee.com",
+								"type": "text"
+							},
+							{
+								"key": "content-type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.36",
+								"type": "text"
+							},
+							{
+								"key": "accept",
+								"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+								"type": "text"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-origin",
+								"type": "text"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "navigate",
+								"type": "text"
+							},
+							{
+								"key": "sec-fetch-user",
+								"value": "?1",
+								"type": "text"
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "document",
+								"type": "text"
+							},
+							{
+								"key": "referer",
+								"value": "https://auth.ecobee.com/u/login?state={{EcoState}}",
+								"type": "text"
+							},
+							{
+								"key": "Referer",
+								"value": "/authorize",
+								"type": "text"
+							},
+							{
+								"key": "accept-encoding",
+								"value": "gzip, deflate, br",
+								"type": "text"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "state",
+									"value": "{{EcoState}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "text"
+								},
+								{
+									"key": "action",
+									"value": "default",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://auth.ecobee.com/u/login?state={{EcoState}}",
+							"protocol": "https",
+							"host": [
+								"auth",
+								"ecobee",
+								"com"
+							],
+							"path": [
+								"u",
+								"login"
+							],
+							"query": [
+								{
+									"key": "state",
+									"value": "{{EcoState}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3d2228c4-fb69-41d6-a6f1-a8cdfc4e904a",
+								"exec": [
+									"pm.test(\"Extract Access Token\", function () {\r",
+									"    //var str = \"<p>Found. Redirecting to\";\r",
+									"    //pm.expect(pm.response.text()).to.include(str);\r",
+									"    const $ = cheerio.load(pm.response.text());\r",
+									"    var at = $('[name=access_token]').val();\r",
+									"    pm.environment.set(\"EcoAccessToken\", at);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f5dedadb-ed0b-4d19-8ad7-1551b5dde6da",
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "3feff424-fb23-4f53-abcc-52cf462591c4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "https://auth.ecobee.com{{EcoBearerHref}}"
+					},
+					"response": []
+				},
+				{
+					"name": "GetUpstairs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b5de54f9-a2c4-4f4e-bd93-7629a4a99564",
+								"exec": [
+									"pm.test(\"Save Upstairs CSV\", function () {\r",
+									"    pm.environment.set(\"UpstairsCSV\", pm.response.text());\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1319b087-3514-4c0c-ac61-5975d8e73f19",
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "7be2e4b7-b8da-4b21-925c-0e8d28105580",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{EcoAccessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "accept",
+								"value": "text/csv",
+								"type": "text"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json;charset=UTF-8",
+								"type": "text"
+							},
+							{
+								"key": "referer",
+								"value": "https://www.ecobee.com/",
+								"type": "text"
+							},
+							{
+								"key": "accept-encoding",
+								"value": "gzip, deflate, br",
+								"type": "text"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.ecobee.com/1/runtimeReportDownload?format=json&body={\"selection\":{\"selectionType\":\"thermostats\",\"selectionMatch\":\"415523998136\"},\"startDate\":\"{{startDate}}\",\"endDate\":\"{{endDate}}\"}&_timestamp={{$timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ecobee",
+								"com"
+							],
+							"path": [
+								"1",
+								"runtimeReportDownload"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json"
+								},
+								{
+									"key": "body",
+									"value": "{\"selection\":{\"selectionType\":\"thermostats\",\"selectionMatch\":\"415523998136\"},\"startDate\":\"{{startDate}}\",\"endDate\":\"{{endDate}}\"}"
+								},
+								{
+									"key": "_timestamp",
+									"value": "{{$timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDownstairs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "920709fe-3ba4-4de0-8497-82f898b963d1",
+								"exec": [
+									"pm.test(\"Save Downstairs CSV\", function () {\r",
+									"    pm.environment.set(\"DownstairsCSV\", pm.response.text());\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "31219ade-c09b-412d-89d3-f4187bfbeb55",
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "b935eaa4-ddcb-4ff6-96dd-bf2b433ce3d9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "Bearer {{EcoAccessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "accept",
+								"value": "text/csv",
+								"type": "text"
+							},
+							{
+								"key": "content-type",
+								"value": "application/json;charset=UTF-8",
+								"type": "text"
+							},
+							{
+								"key": "referer",
+								"value": "https://www.ecobee.com/",
+								"type": "text"
+							},
+							{
+								"key": "accept-encoding",
+								"value": "gzip, deflate, br",
+								"type": "text"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.ecobee.com/1/runtimeReportDownload?format=json&body={\"selection\":{\"selectionType\":\"thermostats\",\"selectionMatch\":\"521750539991\"},\"startDate\":\"{{startDate}}\",\"endDate\":\"{{endDate}}\"}&_timestamp={{$timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"ecobee",
+								"com"
+							],
+							"path": [
+								"1",
+								"runtimeReportDownload"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "json"
+								},
+								{
+									"key": "body",
+									"value": "{\"selection\":{\"selectionType\":\"thermostats\",\"selectionMatch\":\"521750539991\"},\"startDate\":\"{{startDate}}\",\"endDate\":\"{{endDate}}\"}"
+								},
+								{
+									"key": "_timestamp",
+									"value": "{{$timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LogoutClientId",
+					"id": "36610585-ec4d-4fb2-a123-1640f284f886",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"followRedirects": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "referer",
+								"value": "https://www.ecobee.com/consumerportal/index.html",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://auth.ecobee.com/logout?client_id=183eORFPlXyz9BbDZwqexHPBQoVjgadh",
+							"protocol": "https",
+							"host": [
+								"auth",
+								"ecobee",
+								"com"
+							],
+							"path": [
+								"logout"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "183eORFPlXyz9BbDZwqexHPBQoVjgadh"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "a9959d21-5b2c-4061-892b-51f2d2080b32"
+		},
+		{
+			"name": "Other",
+			"item": [
+				{
+					"name": "GetRefreshToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dfb8b779-c3bb-47d7-a743-fa4a6a18de3c",
+								"exec": [
+									"pm.test(\"Extract Access Token\", function () {\r",
+									"    const $ = cheerio.load(pm.response.text());\r",
+									"    var at = $('[name=access_token]').val();\r",
+									"    //pm.environment.set(\"EcoAccessToken\", at);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e5f9d037-746b-4b52-a4e6-0731b9bb1144",
+								"exec": [],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4f19b689-324d-4c92-ad6e-7c276bf337e8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://auth.ecobee.com:443/authorize?response_type=token&response_mode=form_post&client_id=183eORFPlXyz9BbDZwqexHPBQoVjgadh&redirect_uri=https://www.ecobee.com/home/authCallback&audience=https://prod.ecobee.com/api/v1&scope=openid smartWrite piiWrite piiRead smartRead deleteGrants&_ga=2.114779527.1464743709.1695254910-887245236.1695254910",
+							"protocol": "https",
+							"host": [
+								"auth",
+								"ecobee",
+								"com"
+							],
+							"port": "443",
+							"path": [
+								"authorize"
+							],
+							"query": [
+								{
+									"key": "response_type",
+									"value": "token"
+								},
+								{
+									"key": "response_mode",
+									"value": "form_post"
+								},
+								{
+									"key": "client_id",
+									"value": "183eORFPlXyz9BbDZwqexHPBQoVjgadh"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://www.ecobee.com/home/authCallback"
+								},
+								{
+									"key": "audience",
+									"value": "https://prod.ecobee.com/api/v1"
+								},
+								{
+									"key": "scope",
+									"value": "openid smartWrite piiWrite piiRead smartRead deleteGrants"
+								},
+								{
+									"key": "_ga",
+									"value": "2.114779527.1464743709.1695254910-887245236.1695254910"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "531ef18f-f9aa-4e51-918a-637a3d1e4438"
+		}
+	]
+}
